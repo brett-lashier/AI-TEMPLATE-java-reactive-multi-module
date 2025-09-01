@@ -14,6 +14,7 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 **CRITICAL REQUIREMENTS:**
 1. **Must ask required questions and get answers before generating code** - All mandatory questions above must be answered before any code generation or project modification begins
 2. **Do NOT create placeholder folders** - Do **NOT** create any `__PRODUCT__`, `__FEATURE__`, `PRODUCT`, `FEATURE`, `SUBFEATURE` folders or their children folders until explicitly asked to do so by the user. These are only reference placeholders. When the user does ask to generate a new feature, you MUST follow the exact format specified in the Module Structure section below and always ask the user to specify the actual names for `__PRODUCT__`, `__FEATURE__`, and `__SUBFEATURE__` before creating any folders
+3. **Create folders only for features, not classes** - Create the folder structure for the requested feature but do NOT create any Classes in `*-rest`, `*-api`, `*-model` modules. The examples in this README are for reference only when actual classes need to be created
 
 **These requirements are mandatory and must be satisfied before any code generation or project modification.**
 
@@ -25,6 +26,7 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 - Does **not** define modules in its own dependency management.
 - Uses `spring-boot-starter-parent` as its parent.
 - **MUST use Spring Boot version 3.5.4**
+- **IMPORTANT:** Must contain a `<parent>` tag that points to `spring-boot-starter-parent` version 3.5.4
 - **IMPORTANT:** Must contain a `<dependencyManagement>` section, not standalone `<dependencies>`.
 - **CRITICAL:** Must only use dependencies defined in this template - no additional dependencies allowed.
 
@@ -179,40 +181,41 @@ When working with this multi-module reactive Java template, follow these rules t
 
 ### Dependency Rules
 12. **Parent defines versions**: All version management in parent module's `<dependencyManagement>` section (NOT `<dependencies>`)
-13. **Parent must use Spring 3.5.4**: Parent module must specify exactly Spring Boot version 3.5.4
+13. **Parent must use Spring 3.5.4**: Parent module must specify exactly Spring Boot version 3.5.4 with proper `<parent>` tag pointing to `spring-boot-starter-parent`
 14. **Exact dependencies**: Each module must use the exact dependencies defined in this project's parent `dependencyManagement` with exact versions AND match the corresponding module type in this template (e.g., new `*-rest` modules must use same dependencies as this template's `*-rest` module)
 15. **Template compliance**: Parent must only use dependencies defined in this template - no additional dependencies allowed
 16. **No circular dependencies**: Model → API → REST (never reverse)
 17. **Model isolation**: Model module should not depend on API or REST modules
 18. **API purity**: API module contains only interface definitions, no implementations
+19. **Annotation placement**: All `*Mapping` annotations (e.g., `@GetMapping`, `@PostMapping`) and `@RequestMapping` must be placed in the interface (API module), not in the controller implementation
 
 ### Naming Convention Rules
-19. **Module naming**: Use `[project-name]-[module-type]` pattern
-20. **Interface naming**: End API interfaces with appropriate suffixes (`Controller`, `Service`, `Repository`)
-21. **Class naming**: Implementation classes should clearly indicate their purpose and layer
+20. **Module naming**: Use `[project-name]-[module-type]` pattern
+21. **Interface naming**: End API interfaces with appropriate suffixes (`Controller`, `Service`, `Repository`)
+22. **Class naming**: Implementation classes should clearly indicate their purpose and layer
 
 ### Architecture Rules
-22. **Separation of concerns**: Keep transport objects separate from JPA entities
-23. **Reactive patterns**: Use reactive streams (Mono/Flux) in API definitions when applicable
-24. **WebFlux + Netty**: This project uses Spring WebFlux with Netty (not Tomcat) for reactive, non-blocking operations
-25. **Configuration centralization**: Environment-specific config in REST module only
-26. **Single responsibility**: Each module has one clear purpose and boundary
+23. **Separation of concerns**: Keep transport objects separate from JPA entities
+24. **Reactive patterns**: Use reactive streams (Mono/Flux) in API definitions when applicable
+25. **WebFlux + Netty**: This project uses Spring WebFlux with Netty (not Tomcat) for reactive, non-blocking operations
+26. **Configuration centralization**: Environment-specific config in REST module only
+27. **Single responsibility**: Each module has one clear purpose and boundary
 
 ### Build and Deployment Rules
-27. **Root POM management**: List all modules in root `pom.xml` with proper build order
-28. **SCM configuration**: Always include proper SCM section in root POM
-29. **Profile support**: Use Spring profiles for environment-specific configurations
+28. **Root POM management**: List all modules in root `pom.xml` with proper build order
+29. **SCM configuration**: Always include proper SCM section in root POM
+30. **Profile support**: Use Spring profiles for environment-specific configurations
 
 ### Code Quality Rules
-30. **No business logic in API**: Keep API module purely declarative
-31. **Proper error handling**: Implement consistent error handling patterns across REST implementations
-32. **Documentation**: Each interface and major class should have appropriate JavaDoc
-33. **Testing strategy**: Unit tests in each module, integration tests in REST module
+31. **No business logic in API**: Keep API module purely declarative
+32. **Proper error handling**: Implement consistent error handling patterns across REST implementations
+33. **Documentation**: Each interface and major class should have appropriate JavaDoc
+34. **Testing strategy**: Unit tests in each module, integration tests in REST module
 
 ### Extension Rules
-34. **Adding new features**: Create new packages following the established structure
-35. **Cross-cutting concerns**: Handle in REST module configuration, not in API or model
-36. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
+35. **Adding new features**: Create new packages following the established structure
+36. **Cross-cutting concerns**: Handle in REST module configuration, not in API or model
+37. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
 
 These rules ensure maintainable, scalable, and properly architected multi-module reactive Java applications that can be easily understood and extended by AI assistants.
 
@@ -243,6 +246,7 @@ Follow these steps when an LLM/AI agent is asked to create a new REST endpoint:
 - Ask user for the interface name for REST mapping (e.g., `UserRegistrationApi`)
 - Create the interface file in `*-api/src/main/java/com/[groupId]/__PRODUCT__/__FEATURE__/[InterfaceName].java`
 - Define the REST endpoint mappings using Spring WebFlux annotations
+- **IMPORTANT**: Place ALL `*Mapping` annotations (e.g., `@GetMapping`, `@PostMapping`) and `@RequestMapping` in the interface, NOT in the controller implementation
 
 #### Step 4: Create REST Controller (if needed)
 - If PRODUCT/FEATURE folders don't exist in `*-rest`, create them and the `controller/` subfolder
@@ -261,7 +265,8 @@ Use the provided bash scripts to automate this process:
 - Controller implementations must end with `Controller` and implement the API interface
 - Only create the API interface and REST controller - do not create service or repository layers
 - Use reactive types (Mono/Flux) for Spring WebFlux compatibility
-- Ensure proper Spring annotations (@RestController, @RequestMapping, etc.)
+- **CRITICAL**: Place all `*Mapping` annotations (e.g., `@GetMapping`, `@PostMapping`) and `@RequestMapping` in the interface (API module), NOT in the controller implementation
+- Controller implementations should only have `@RestController` annotation and implement the interface methods
 
 ### Example Structure After Creation
 ```
