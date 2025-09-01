@@ -1,5 +1,8 @@
 # AI-TEMPLATE-java-reactive-multi-module
 
+> **⚠️ DISCLAIMER FOR HUMAN READERS**  
+> This README is specifically designed as a comprehensive instruction manual for AI/LLM agents (Claude Code, Copilot, Cursor, etc.) to automatically generate Java projects following strict architectural patterns. While humans can read and understand these instructions, the level of detail and repetitive nature of the rules are optimized for AI comprehension and compliance.
+
 This is a **Java 21** reactive multi-module project template using Spring WebFlux, Lombok, and Netty (instead of Tomcat) for non-blocking, reactive web applications.
 
 This project is designed for use by AI agents such as Claude Code, Copilot, Cursor, and others. Please read this README to understand the multi-module pattern and how to use or extend this template.
@@ -159,6 +162,9 @@ For further details, see the individual module `pom.xml` files and the root
 
 When working with this multi-module reactive Java template, follow these rules to maintain consistency and proper architecture:
 
+### ⚠️ CRITICAL: NO ASSUMPTIONS RULE ⚠️
+**NEVER NEVER NEVER make assumptions about versions being broken, dependencies needing updates, or changes that should be added.** Use EXACTLY what is specified in this template. Do not suggest version upgrades, dependency additions, or modifications unless explicitly requested by the user. The template versions and dependencies are intentionally chosen and tested.
+
 ### Module Creation Rules
 1. **Always create 4 modules minimum**: `*-parent`, `*-api`, `*-model`, `*-rest`
 2. **Parent module**: Must use `pom` packaging and `spring-boot-starter-parent` as parent
@@ -211,11 +217,12 @@ When working with this multi-module reactive Java template, follow these rules t
 32. **Proper error handling**: Implement consistent error handling patterns across REST implementations
 33. **Documentation**: Each interface and major class should have appropriate JavaDoc
 34. **Testing strategy**: Unit tests in each module, integration tests in REST module
+35. **Mandatory completion test**: After completing ANY project generation or modification, MUST run `mvn clean install` to verify the project builds successfully and follows all README requirements. If the build fails, fix all issues before considering the task complete
 
 ### Extension Rules
-35. **Adding new features**: Create new packages following the established structure
-36. **Cross-cutting concerns**: Handle in REST module configuration, not in API or model
-37. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
+36. **Adding new features**: Create new packages following the established structure
+37. **Cross-cutting concerns**: Handle in REST module configuration, not in API or model
+38. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
 
 These rules ensure maintainable, scalable, and properly architected multi-module reactive Java applications that can be easily understood and extended by AI assistants.
 
