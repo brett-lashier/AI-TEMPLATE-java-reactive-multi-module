@@ -215,3 +215,58 @@ When working with this multi-module reactive Java template, follow these rules t
 36. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
 
 These rules ensure maintainable, scalable, and properly architected multi-module reactive Java applications that can be easily understood and extended by AI assistants.
+
+## LLM Rules for Adding REST Endpoints
+
+Follow these steps when an LLM/AI agent is asked to create a new REST endpoint:
+
+### Required Information
+1. **Product Name** - The domain/product area (e.g., `user`, `company`, `inventory`)
+2. **Feature Name** - The specific feature (e.g., `registration`, `dashboard`, `orders`)
+3. **Endpoint Details** - HTTP method, path, request/response structure
+4. **Interface Name** - If product/feature doesn't exist, ask for the interface name to store in `*-api` module
+
+### Step-by-Step Process
+
+#### Step 1: Check Product Existence
+- Search for the product folder in `*-api/src/main/java/com/[groupId]/__PRODUCT__/`
+- Search for the product folder in `*-rest/src/main/java/com/[groupId]/__PRODUCT__/`
+- If product doesn't exist, create the folder structure in both modules
+
+#### Step 2: Check Feature Existence  
+- Search for the feature folder in `*-api/src/main/java/com/[groupId]/__PRODUCT__/__FEATURE__/`
+- Search for the feature folder in `*-rest/src/main/java/com/[groupId]/__PRODUCT__/__FEATURE__/`
+- If feature doesn't exist, create the folder structure in both modules
+
+#### Step 3: Create API Interface (if needed)
+- If PRODUCT/FEATURE folders don't exist in `*-api`, create them
+- Ask user for the interface name for REST mapping (e.g., `UserRegistrationApi`)
+- Create the interface file in `*-api/src/main/java/com/[groupId]/__PRODUCT__/__FEATURE__/[InterfaceName].java`
+- Define the REST endpoint mappings using Spring WebFlux annotations
+
+#### Step 4: Create REST Controller (if needed)
+- If PRODUCT/FEATURE folders don't exist in `*-rest`, create them and the `controller/` subfolder
+- Create controller file named `[InterfaceName]Controller.java` that implements the interface from Step 3
+- Place in `*-rest/src/main/java/com/[groupId]/__PRODUCT__/__FEATURE__/controller/`
+- **DO NOT** create service or repository classes - this is the developer's responsibility
+
+### Automation Scripts
+Use the provided bash scripts to automate this process:
+- `create-endpoint.sh` - Main script for creating endpoints
+- `check-structure.sh` - Utility to check existing project structure
+
+### Important Notes
+- Always follow the existing package structure: `com.[groupId].__PRODUCT__.__FEATURE__`
+- Interface names should end with appropriate suffixes (e.g., `Api`, `Controller`)  
+- Controller implementations must end with `Controller` and implement the API interface
+- Only create the API interface and REST controller - do not create service or repository layers
+- Use reactive types (Mono/Flux) for Spring WebFlux compatibility
+- Ensure proper Spring annotations (@RestController, @RequestMapping, etc.)
+
+### Example Structure After Creation
+```
+*-api/src/main/java/com/[groupId]/user/registration/UserRegistrationApi.java
+*-rest/src/main/java/com/[groupId]/user/registration/controller/UserRegistrationController.java
+```
+
+The controller will implement the interface and provide the actual endpoint implementation.
