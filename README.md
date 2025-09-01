@@ -11,12 +11,11 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 1. **What is the project name?** (This will replace all instances of `AI-TEMPLATE` throughout the codebase)
 2. **What is the group ID?** (This will replace `com.example` in all package structures)
 
-**CRITICAL FOLDER CREATION RULE:**
-- Do **NOT** create any `__PRODUCT__`, `__FEATURE__`, `PRODUCT`, `FEATURE`, `SUBFEATURE` folders or their children folders until explicitly asked to do so by the user
-- When asked to create these folders, you MUST follow the exact format specified in the Module Structure section below
-- Always ask the user to specify the actual names for `__PRODUCT__`, `__FEATURE__`, and `__SUBFEATURE__` before creating any folders
+**CRITICAL REQUIREMENTS:**
+1. **Must ask required questions and get answers before generating code** - All mandatory questions above must be answered before any code generation or project modification begins
+2. **Do NOT create placeholder folders** - Do **NOT** create any `__PRODUCT__`, `__FEATURE__`, `PRODUCT`, `FEATURE`, `SUBFEATURE` folders or their children folders until explicitly asked to do so by the user. These are only reference placeholders. When the user does ask to generate a new feature, you MUST follow the exact format specified in the Module Structure section below and always ask the user to specify the actual names for `__PRODUCT__`, `__FEATURE__`, and `__SUBFEATURE__` before creating any folders
 
-**These questions are mandatory and must be answered before any code generation or project modification.**
+**These requirements are mandatory and must be satisfied before any code generation or project modification.**
 
 ## Module Structure
 
