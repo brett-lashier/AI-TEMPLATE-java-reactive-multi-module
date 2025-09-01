@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.brettlashier.ai</groupId>
+    <artifactId>ai-template</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>--AI-TEMPLATE--java-reactive</name>
+    <description>--AI-TEMPLATE--java-reactive</description>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+
+    <modules>
+        <module>--AI-TEMPLATE--java-reactive-parent</module>
+        <module>--AI-TEMPLATE--java-rective-model</module>
+        <module>--AI-TEMPLATE--java-rective-api</module>
+        <module>--AI-TEMPLATE--java-reactive-rest</module>
+    </modules>
+
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>3.5.4</spring-boot.version>
+    </properties>
+
+    <scm>
+        <connection>scm:git:https://github.com/brett-lashier/AI-TEMPLATE-java-reactive-multi-module.git</connection>
+        <developerConnection>scm:git@github.com:brett-lashier/AI-TEMPLATE-java-reactive-multi-module.git</developerConnection>
+        <url>https://github.com/brett-lashier/AI-TEMPLATE-java-reactive-multi-module</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>jib-build</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.google.cloud.tools</groupId>
+                        <artifactId>jib-maven-plugin</artifactId>
+                        <version>3.4.3</version>
+                        <configuration>
+                            <to>
+                                <image>localhost:5000/meritloop-core:latest</image>
+                            </to>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
