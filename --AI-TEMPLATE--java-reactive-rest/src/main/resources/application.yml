@@ -1,0 +1,24 @@
+# Application Configuration
+spring:
+  application:
+    name: --AI-TEMPLATE--java-reactive-rest
+  main:
+    web-application-type: reactive
+
+# WebFlux Server Configuration (for reactive REST endpoints)
+server:
+  port: 8085
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.brettlashier: DEBUG
+    io.netty: DEBUG
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
