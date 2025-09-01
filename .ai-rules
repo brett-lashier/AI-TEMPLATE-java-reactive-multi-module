@@ -1,0 +1,30 @@
+# AI Project Rules - Java Multi-Module Template
+
+## MANDATORY PRE-FLIGHT
+- ASK FIRST: project_name, group_id
+- NEVER ASSUME: version upgrades, dependency changes
+- USE EXACT: Java 21, Spring Boot 3.5.4, WebFlux+Netty
+- TEST: `mvn clean install` must pass after changes
+
+## MODULE STRUCTURE
+*-parent (pom) → <parent>spring-boot-starter-parent 3.5.4</parent> + <dependencyManagement>
+*-api (jar) → interfaces only, depends on model
+*-model (jar) → POJOs/entities, parent dependency only  
+*-rest (jar) → controllers, depends on api+model
+
+## CRITICAL RULES
+- Annotations (@RequestMapping, @GetMapping) in INTERFACES, not controllers
+- Controllers: @RestController only, implement interface
+- Folders: create for features, NOT classes (examples = reference only)
+- Dependencies: Model → API → REST (no circular)
+- Reactive: Use Mono/Flux patterns
+
+## PACKAGE STRUCTURE
+com.[groupId].__PRODUCT__.__FEATURE__/[controller|service|repository]
+
+## USAGE
+**Claude Code:** "Create project using .ai-rules. Project: X, Group: Y"
+**Cursor:** "@codebase Follow .ai-rules to build project X"  
+**Copilot:** "Use .ai-rules to create Spring project X"
+
+## VIOLATION = TASK INCOMPLETE

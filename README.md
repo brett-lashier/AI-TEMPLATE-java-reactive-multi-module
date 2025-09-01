@@ -1,7 +1,10 @@
 # AI-TEMPLATE-java-reactive-multi-module
 
+> **⚠️ FOR AI AGENTS: Read `.ai-rules` file for concise project rules**  
+> **📖 FOR HUMANS: This README contains detailed documentation**
+
 > **⚠️ DISCLAIMER FOR HUMAN READERS**  
-> This README is specifically designed as a comprehensive instruction manual for AI/LLM agents (Claude Code, Copilot, Cursor, etc.) to automatically generate Java projects following strict architectural patterns. While humans can read and understand these instructions, the level of detail and repetitive nature of the rules are optimized for AI comprehension and compliance.
+> This README provides comprehensive documentation. AI agents should primarily use the `.ai-rules` file for concise, actionable instructions, while referencing this README for detailed explanations.
 
 This is a **Java 21** reactive multi-module project template using Spring WebFlux, Lombok, and Netty (instead of Tomcat) for non-blocking, reactive web applications.
 
