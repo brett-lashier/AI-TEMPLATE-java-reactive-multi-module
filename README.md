@@ -25,13 +25,15 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 - **Packaging:** `pom`
 - Does **not** define modules in its own dependency management.
 - Uses `spring-boot-starter-parent` as its parent.
+- **MUST use Spring Boot version 3.5.4**
 - **IMPORTANT:** Must contain a `<dependencyManagement>` section, not standalone `<dependencies>`.
+- **CRITICAL:** Must only use dependencies defined in this template - no additional dependencies allowed.
 
 ### `*-api`
 - **Packaging:** `jar`
 - Contains only a `src` directory for source code and a `pom.xml`.
 - May include additional files (e.g., Lombok configuration).
-- **Dependencies:** Must use exact dependencies defined in this project's parent module via `dependencyManagement` AND the same dependencies used in this template's `*-api` module.
+- **Dependencies:** Must use exact dependencies defined in this project's parent module via `dependencyManagement` AND the same dependencies used in this template's `*-api` module with exact versions from parent.
 - **Folder Structure:**
   ```
   src/
@@ -53,7 +55,7 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 - **Packaging:** `jar`
 - Contains only a `pom.xml` (no other files or directories).
 - Should contain an `application-[ENV].yml` file, where `[ENV]` is the name of the profile and environment that needs separate configuration.
-- **Dependencies:** Must use exact dependencies defined in this project's parent module via `dependencyManagement` AND the same dependencies used in this template's `*-rest` module.
+- **Dependencies:** Must use exact dependencies defined in this project's parent module via `dependencyManagement` AND the same dependencies used in this template's `*-rest` module with exact versions from parent.
 - **Folder Structure (when implemented):**
   ```
   src/
@@ -75,7 +77,7 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 
 ### `*-model`
 - **Packaging:** `jar`
-- **Dependencies:** Must use exact dependencies defined in this project's parent module via `dependencyManagement` AND the same dependencies used in this template's `*-model` module.
+- **Dependencies:** Must use exact dependencies defined in this project's parent module via `dependencyManagement` AND the same dependencies used in this template's `*-model` module with exact versions from parent.
 - **Folder Structure:**
   ```
   src/
@@ -106,16 +108,16 @@ This project is designed for use by AI agents such as Claude Code, Copilot, Curs
 2. **API (`*-api`)**:  
    - Depends on the model module.
    - Uses the parent module as its parent.
-   - **Dependencies:** Must use exact dependencies from parent's `dependencyManagement` AND match this template's `*-api` module dependencies.
+   - **Dependencies:** Must use exact dependencies from parent's `dependencyManagement` with exact versions AND match this template's `*-api` module dependencies exactly.
 
 3. **Model (`*-model`)**:  
    - Does **not** depend on other modules.
    - Uses the parent module as its parent.
-   - **Dependencies:** Must use exact dependencies from parent's `dependencyManagement` AND match this template's `*-model` module dependencies.
+   - **Dependencies:** Must use exact dependencies from parent's `dependencyManagement` with exact versions AND match this template's `*-model` module dependencies exactly.
 
 4. **REST (`*-rest`)**:  
    - Depends on the model and API modules (and any other required modules).
-   - **Dependencies:** Must use exact dependencies from parent's `dependencyManagement` AND match this template's `*-rest` module dependencies.
+   - **Dependencies:** Must use exact dependencies from parent's `dependencyManagement` with exact versions AND match this template's `*-rest` module dependencies exactly.
 
 ## Building
 
@@ -178,37 +180,39 @@ When working with this multi-module reactive Java template, follow these rules t
 
 ### Dependency Rules
 12. **Parent defines versions**: All version management in parent module's `<dependencyManagement>` section (NOT `<dependencies>`)
-13. **Exact dependencies**: Each module must use the exact dependencies defined in this project's parent `dependencyManagement` AND match the corresponding module type in this template (e.g., new `*-rest` modules must use same dependencies as this template's `*-rest` module)
-14. **No circular dependencies**: Model → API → REST (never reverse)
-15. **Model isolation**: Model module should not depend on API or REST modules
-16. **API purity**: API module contains only interface definitions, no implementations
+13. **Parent must use Spring 3.5.4**: Parent module must specify exactly Spring Boot version 3.5.4
+14. **Exact dependencies**: Each module must use the exact dependencies defined in this project's parent `dependencyManagement` with exact versions AND match the corresponding module type in this template (e.g., new `*-rest` modules must use same dependencies as this template's `*-rest` module)
+15. **Template compliance**: Parent must only use dependencies defined in this template - no additional dependencies allowed
+16. **No circular dependencies**: Model → API → REST (never reverse)
+17. **Model isolation**: Model module should not depend on API or REST modules
+18. **API purity**: API module contains only interface definitions, no implementations
 
 ### Naming Convention Rules
-17. **Module naming**: Use `[project-name]-[module-type]` pattern
-18. **Interface naming**: End API interfaces with appropriate suffixes (`Controller`, `Service`, `Repository`)
-19. **Class naming**: Implementation classes should clearly indicate their purpose and layer
+19. **Module naming**: Use `[project-name]-[module-type]` pattern
+20. **Interface naming**: End API interfaces with appropriate suffixes (`Controller`, `Service`, `Repository`)
+21. **Class naming**: Implementation classes should clearly indicate their purpose and layer
 
 ### Architecture Rules
-20. **Separation of concerns**: Keep transport objects separate from JPA entities
-21. **Reactive patterns**: Use reactive streams (Mono/Flux) in API definitions when applicable
-22. **WebFlux + Netty**: This project uses Spring WebFlux with Netty (not Tomcat) for reactive, non-blocking operations
-23. **Configuration centralization**: Environment-specific config in REST module only
-24. **Single responsibility**: Each module has one clear purpose and boundary
+22. **Separation of concerns**: Keep transport objects separate from JPA entities
+23. **Reactive patterns**: Use reactive streams (Mono/Flux) in API definitions when applicable
+24. **WebFlux + Netty**: This project uses Spring WebFlux with Netty (not Tomcat) for reactive, non-blocking operations
+25. **Configuration centralization**: Environment-specific config in REST module only
+26. **Single responsibility**: Each module has one clear purpose and boundary
 
 ### Build and Deployment Rules
-25. **Root POM management**: List all modules in root `pom.xml` with proper build order
-26. **SCM configuration**: Always include proper SCM section in root POM
-27. **Profile support**: Use Spring profiles for environment-specific configurations
+27. **Root POM management**: List all modules in root `pom.xml` with proper build order
+28. **SCM configuration**: Always include proper SCM section in root POM
+29. **Profile support**: Use Spring profiles for environment-specific configurations
 
 ### Code Quality Rules
-28. **No business logic in API**: Keep API module purely declarative
-29. **Proper error handling**: Implement consistent error handling patterns across REST implementations
-30. **Documentation**: Each interface and major class should have appropriate JavaDoc
-31. **Testing strategy**: Unit tests in each module, integration tests in REST module
+30. **No business logic in API**: Keep API module purely declarative
+31. **Proper error handling**: Implement consistent error handling patterns across REST implementations
+32. **Documentation**: Each interface and major class should have appropriate JavaDoc
+33. **Testing strategy**: Unit tests in each module, integration tests in REST module
 
 ### Extension Rules
-32. **Adding new features**: Create new packages following the established structure
-33. **Cross-cutting concerns**: Handle in REST module configuration, not in API or model
-34. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
+34. **Adding new features**: Create new packages following the established structure
+35. **Cross-cutting concerns**: Handle in REST module configuration, not in API or model
+36. **Third-party integrations**: Isolate in REST module, expose through API interfaces only
 
 These rules ensure maintainable, scalable, and properly architected multi-module reactive Java applications that can be easily understood and extended by AI assistants.
